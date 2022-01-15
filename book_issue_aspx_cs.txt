@@ -1,0 +1,47 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.UI;
+using System.Web.UI.WebControls;
+
+namespace pract_consumerWeb
+{
+    public partial class book_issue : System.Web.UI.Page
+    {
+
+        localhost.WebService1 ws = new localhost.WebService1();
+        protected void Page_Load(object sender, EventArgs e)
+        {
+            if (!IsPostBack)
+            {
+                dlbook.DataSource = ws.getbook();
+                dlbook.DataBind();
+                dlbook.DataTextField = "title";
+                dlbook.DataValueField = "book_id";
+                dlbook.DataBind();
+
+                dlmember.DataSource = ws.getmember();
+                dlmember.DataBind();
+                dlmember.DataTextField = "name";
+                dlmember.DataValueField = "mem_id";
+                dlmember.DataBind();
+            }
+        }
+
+        protected void Button1_Click(object sender, EventArgs e)
+        {
+            int book = Convert.ToInt32(dlbook.SelectedValue);
+            int member = Convert.ToInt32(dlmember.SelectedValue);
+            int row = ws.insert_data(issue_dt.Text, book, member);
+            if(row > 0)
+            {
+                Label1.Text = "Book Issued Successfully";
+            }
+            else
+            {
+                Label1.Text = "Book Not Issued";
+            }
+        }
+    }
+}

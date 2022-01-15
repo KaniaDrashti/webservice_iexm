@@ -1,0 +1,38 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.UI;
+using System.Web.UI.WebControls;
+
+namespace pract_consumerWeb
+{
+    public partial class check_book : System.Web.UI.Page
+    {
+        localhost.WebService1 ws = new localhost.WebService1();
+        protected void Page_Load(object sender, EventArgs e)
+        {
+            if (!IsPostBack)
+            {
+                dlbook.DataSource = ws.getbook();
+                dlbook.DataBind();
+                dlbook.DataTextField = "title";
+                dlbook.DataValueField = "title";
+                dlbook.DataBind();
+            }
+        }
+
+        protected void check_book_available_Click(object sender, EventArgs e)
+        {
+            int row = ws.get_book_available(dlbook.SelectedValue);
+            if(row < 3)
+            {
+                Response.Redirect("book_issue.aspx");
+            }
+            else
+            {
+                Label1.Text = "Some error occurs";
+            }
+        }
+    }
+}
